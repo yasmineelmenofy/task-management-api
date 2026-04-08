@@ -1,18 +1,22 @@
-//imports
 import express from "express";
+import dotenv from "dotenv";
+import { connectDB } from "./config/db";
 
-//declarations
+dotenv.config();
+
 const app = express();
-const port = 5000;
+const port = process.env.PORT || 5000;
 
-//middlewares
+// connect database
+connectDB();
+
 app.use(express.json());
 
-//routes
-app.get('/', (req,res) => {
-    res.send("Task Management API is Running ");
-})
+// routes
+app.get("/", (req, res) => {
+  res.send("Task Management API is Running");
+});
 
 app.listen(port, () => {
-    console.log(`Server is Running on port ${port}`);
-})
+  console.log(`Server is Running on port ${port}`);
+});
