@@ -6,9 +6,22 @@ export const createTask = async (data: Partial<Task>) => {
   return task;
 };
 
-export const getTasks = async () => {
-  const tasks = await TaskModel.find();
-  return tasks;
+export const getTasks = async (page: number, limit: number) => {
+  const skip = (page - 1) * limit;
+
+  const tasks = await TaskModel.find()
+    .skip(skip)
+    .limit(limit)
+    .sort({ createdAt: -1 });
+
+  const total = await TaskModel.countDocuments();
+
+  return {
+    tasks,
+    total,
+    page,
+    totalPages: Math.ceil(total / limit),
+  };
 };
 
 export const getTaskById = async (id: string) => {
