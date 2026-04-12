@@ -20,7 +20,7 @@ export const createTaskController = asyncHandler(
       message: "Task created successfully",
       data: task,
     });
-  }
+  },
 );
 
 /*
@@ -34,7 +34,7 @@ export const getAllTasksController = asyncHandler(
       message: "Tasks retrieved successfully",
       data: tasks,
     });
-  }
+  },
 );
 
 /*
@@ -58,7 +58,7 @@ export const getTaskByIdController = asyncHandler(
       message: "Task retrieved successfully",
       data: task,
     });
-  }
+  },
 );
 
 /*
@@ -82,7 +82,7 @@ export const updateTaskController = asyncHandler(
       message: "Task updated successfully",
       data: task,
     });
-  }
+  },
 );
 
 /*
@@ -105,5 +105,5 @@ export const deleteTaskController = asyncHandler(
     res.status(200).json({
       message: "Task deleted successfully",
     });
-  }
+  },
 );

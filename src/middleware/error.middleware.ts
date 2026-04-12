@@ -7,9 +7,8 @@ export const errorMiddleware = (
   err: unknown,
   req: Request,
   res: Response,
-  next: NextFunction
+  next: NextFunction,
 ): void => {
-
   if (process.env.NODE_ENV !== "production") {
     console.error(err);
   }
@@ -79,6 +78,8 @@ export const errorMiddleware = (
     success: false,
     type: "InternalServerError",
     message: "Something went wrong",
-    ...(process.env.NODE_ENV !== "production" && { stack: (err as any)?.stack }),
+    ...(process.env.NODE_ENV !== "production" && {
+      stack: (err as any)?.stack,
+    }),
   });
 };
