@@ -1,4 +1,8 @@
 import { Request, Response } from "express";
+import mongoose from "mongoose";
+import { asyncHandler } from "../utils/asyncHandler";
+import { ApiError } from "../utils/apiError";
+
 import {
   createTask,
   getTasks,
@@ -11,139 +15,102 @@ import {
 POST /tasks
 Create Task
 */
-export const createTaskController = async (req: Request, res: Response) => {
-  try {
+export const createTaskController = asyncHandler(
+  async (req: Request, res: Response) => {
     const task = await createTask(req.body);
 
     res.status(201).json({
       message: "Task created successfully",
       data: task,
     });
-  } catch (error) {
-    res.status(500).json({
-      message: "Failed to create task",
-      error,
-    });
   }
-};
+);
 
 /*
 GET /tasks
 Get All Tasks
 */
-export const getAllTasksController = async (req: Request, res: Response) => {
-  try {
+export const getAllTasksController = asyncHandler(
+  async (req: Request, res: Response) => {
     const tasks = await getTasks();
 
     res.status(200).json({
       message: "Tasks retrieved successfully",
       data: tasks,
     });
-  } catch (error) {
-    res.status(500).json({
-      message: "Failed to retrieve tasks",
-      error,
-    });
   }
-};
+);
 
 /*
 GET /tasks/:id
 Get Single Task
 */
-export const getTaskByIdController = async (req: Request, res: Response) => {
-  try {
+export const getTaskByIdController = asyncHandler(
+  async (req: Request, res: Response) => {
     const { id } = req.params;
 
-    if (!id || Array.isArray(id)) {
-      return res.status(400).json({
-        message: "Invalid task id",
-      });
+    if (!mongoose.Types.ObjectId.isValid(id)) {
+      throw new ApiError("Invalid task id", 400);
     }
 
     const task = await getTaskById(id);
 
     if (!task) {
-      return res.status(404).json({
-        message: "Task not found",
-      });
+      throw new ApiError("Task not found", 404);
     }
 
     res.status(200).json({
       message: "Task retrieved successfully",
       data: task,
     });
-  } catch (error) {
-    res.status(500).json({
-      message: "Failed to retrieve task",
-      error,
-    });
   }
-};
+);
 
 /*
 PATCH /tasks/:id
 Update Task
 */
-export const updateTaskController = async (req: Request, res: Response) => {
-  try {
+export const updateTaskController = asyncHandler(
+  async (req: Request, res: Response) => {
     const { id } = req.params;
 
-    if (!id || Array.isArray(id)) {
-      return res.status(400).json({
-        message: "Invalid task id",
-      });
+    if (!mongoose.Types.ObjectId.isValid(id)) {
+      throw new ApiError("Invalid task id", 400);
     }
 
     const task = await updateTask(id, req.body);
 
     if (!task) {
-      return res.status(404).json({
-        message: "Task not found",
-      });
+      throw new ApiError("Task not found", 404);
     }
 
     res.status(200).json({
       message: "Task updated successfully",
       data: task,
     });
-  } catch (error) {
-    res.status(500).json({
-      message: "Failed to update task",
-      error,
-    });
   }
-};
+);
 
 /*
 DELETE /tasks/:id
 Delete Task
 */
-export const deleteTaskController = async (req: Request, res: Response) => {
-  try {
+export const deleteTaskController = asyncHandler(
+  async (req: Request, res: Response) => {
     const { id } = req.params;
 
-    if (!id || Array.isArray(id)) {
-      return res.status(400).json({
-        message: "Invalid task id",
-      });
+    if (!mongoose.Types.ObjectId.isValid(id)) {
+      throw new ApiError("Invalid task id", 400);
     }
 
     const task = await deleteTask(id);
 
     if (!task) {
-      return res.status(404).json({
-        message: "Task not found",
-      });
+      throw new ApiError("Task not found", 404);
     }
 
     res.status(200).json({
       message: "Task deleted successfully",
     });
-  } catch (error) {
-    res.status(500).json({
-      message: "Failed to delete task",
-      error,
-    });
   }
-};
+);
