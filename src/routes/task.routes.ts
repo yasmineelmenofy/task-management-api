@@ -4,14 +4,12 @@ import {
   getAllTasksController,
   getTaskByIdController,
   updateTaskController,
-  deleteTaskController
+  deleteTaskController,
 } from "../controllers/task.controller";
 
 import { validate } from "../middleware/validate.middleware";
-import {
-  createTaskSchema,
-  updateTaskSchema
-} from "../schemas/task.schema";
+import { createTaskSchema, updateTaskSchema } from "../schemas/task.schema";
+import { protect } from "../middleware/auth.middleware";
 
 const router = Router();
 
@@ -29,5 +27,9 @@ router.patch("/:id", validate(updateTaskSchema), updateTaskController);
 
 // DELETE
 router.delete("/:id", deleteTaskController);
+
+router.post("/", protect, createTaskController);
+router.patch("/:id", protect, updateTaskController);
+router.delete("/:id", protect, deleteTaskController);
 
 export default router;

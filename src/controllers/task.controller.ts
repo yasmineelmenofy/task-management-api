@@ -31,10 +31,13 @@ export const getAllTasksController = asyncHandler(
     const page = Number(req.query.page) || 1;
     const limit = Number(req.query.limit) || 10;
 
-    const result = await getTasks(page, limit);
+    const status = req.query.status as string | undefined;
+    const sort = (req.query.sort as "asc" | "desc") || "desc";
+
+    const result = await getTasks(page, limit, status, sort);
 
     res.status(200).json({
-      success: true,
+      message: "Tasks retrieved successfully",
       ...result,
     });
   },

@@ -7,6 +7,7 @@ import rateLimit from "express-rate-limit";
 import { connectDB } from "./config/db";
 import taskRoutes from "./routes/task.routes";
 import { errorMiddleware } from "./middleware/error.middleware";
+import authRoutes from "./routes/auth.routes";
 
 dotenv.config();
 
@@ -42,6 +43,7 @@ app.get("/", (req, res) => {
 
 //  Routes
 app.use("/api/tasks", taskRoutes);
+app.use("/auth", authRoutes);
 //  Error middleware
 app.use(errorMiddleware);
 

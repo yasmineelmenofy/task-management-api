@@ -6,15 +6,31 @@ export const createTask = async (data: Partial<Task>) => {
   return task;
 };
 
-export const getTasks = async (page: number, limit: number) => {
+export const getTasks = async (
+  page: number,
+  limit: number,
+  status?: string,
+  sort: "asc" | "desc" = "desc",
+) => {
   const skip = (page - 1) * limit;
 
-  const tasks = await TaskModel.find()
+  // filter
+  const filter: any = {};
+  if (status) {
+    filter.status = status;
+  }
+
+  // sort
+  const sortOption = {
+    createdAt: (sort === "asc" ? 1 : -1) as 1 | -1,
+  };
+
+  const tasks = await TaskModel.find(filter)
     .skip(skip)
     .limit(limit)
-    .sort({ createdAt: -1 });
+    .sort(sortOption);
 
-  const total = await TaskModel.countDocuments();
+  const total = await TaskModel.countDocuments(filter);
 
   return {
     tasks,
