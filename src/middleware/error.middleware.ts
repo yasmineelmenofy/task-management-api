@@ -14,11 +14,13 @@ export const errorMiddleware = (
     console.error(err);
   }
 
+  // ApiError
   if (err instanceof ApiError) {
     res.status(err.statusCode).json({
       success: false,
       type: "ApiError",
       message: err.message,
+      ...(process.env.NODE_ENV !== "production" && { stack: err.stack }),
     });
     return;
   }
@@ -47,7 +49,7 @@ export const errorMiddleware = (
     return;
   }
 
-  // Duplicate key error (unique fields)
+  // Duplicate key error
   if ((err as any)?.code === 11000) {
     res.status(400).json({
       success: false,
@@ -58,7 +60,7 @@ export const errorMiddleware = (
     return;
   }
 
-  // Mongoose schema validation
+  // Mongoose validation
   if (err instanceof mongoose.Error.ValidationError) {
     res.status(400).json({
       success: false,
@@ -72,10 +74,11 @@ export const errorMiddleware = (
     return;
   }
 
-  // Fallback error
+  // Unknown error
   res.status(500).json({
     success: false,
     type: "InternalServerError",
     message: "Something went wrong",
+    ...(process.env.NODE_ENV !== "production" && { stack: (err as any)?.stack }),
   });
 };

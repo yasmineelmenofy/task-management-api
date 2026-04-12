@@ -1,5 +1,6 @@
 import { Request, Response } from "express";
 import { asyncHandler } from "../utils/asyncHandler";
+import { ApiError } from "../utils/apiError";
 import {
   createTask,
   getTasks,
@@ -10,7 +11,6 @@ import {
 
 /*
 POST /tasks
-Create Task
 */
 export const createTaskController = asyncHandler(
   async (req: Request, res: Response) => {
@@ -25,10 +25,9 @@ export const createTaskController = asyncHandler(
 
 /*
 GET /tasks
-Get All Tasks
 */
 export const getAllTasksController = asyncHandler(
-  async (req: Request, res: Response) => {
+  async (_req: Request, res: Response) => {
     const tasks = await getTasks();
 
     res.status(200).json({
@@ -40,24 +39,19 @@ export const getAllTasksController = asyncHandler(
 
 /*
 GET /tasks/:id
-Get Single Task
 */
 export const getTaskByIdController = asyncHandler(
   async (req: Request, res: Response) => {
-    const { id } = req.params;
+    const id = req.params.id as string;
 
-    if (!id || Array.isArray(id)) {
-      return res.status(400).json({
-        message: "Invalid task id",
-      });
+    if (!id) {
+      throw new ApiError(400, "Invalid task id");
     }
 
     const task = await getTaskById(id);
 
     if (!task) {
-      return res.status(404).json({
-        message: "Task not found",
-      });
+      throw new ApiError(404, "Task not found");
     }
 
     res.status(200).json({
@@ -69,24 +63,19 @@ export const getTaskByIdController = asyncHandler(
 
 /*
 PATCH /tasks/:id
-Update Task
 */
 export const updateTaskController = asyncHandler(
   async (req: Request, res: Response) => {
-    const { id } = req.params;
+    const id = req.params.id as string;
 
-    if (!id || Array.isArray(id)) {
-      return res.status(400).json({
-        message: "Invalid task id",
-      });
+    if (!id) {
+      throw new ApiError(400, "Invalid task id");
     }
 
     const task = await updateTask(id, req.body);
 
     if (!task) {
-      return res.status(404).json({
-        message: "Task not found",
-      });
+      throw new ApiError(404, "Task not found");
     }
 
     res.status(200).json({
@@ -98,24 +87,19 @@ export const updateTaskController = asyncHandler(
 
 /*
 DELETE /tasks/:id
-Delete Task
 */
 export const deleteTaskController = asyncHandler(
   async (req: Request, res: Response) => {
-    const { id } = req.params;
+    const id = req.params.id as string;
 
-    if (!id || Array.isArray(id)) {
-      return res.status(400).json({
-        message: "Invalid task id",
-      });
+    if (!id) {
+      throw new ApiError(400, "Invalid task id");
     }
 
     const task = await deleteTask(id);
 
     if (!task) {
-      return res.status(404).json({
-        message: "Task not found",
-      });
+      throw new ApiError(404, "Task not found");
     }
 
     res.status(200).json({
