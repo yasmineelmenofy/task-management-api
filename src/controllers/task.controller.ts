@@ -1,8 +1,5 @@
 import { Request, Response } from "express";
-import mongoose from "mongoose";
 import { asyncHandler } from "../utils/asyncHandler";
-import { ApiError } from "../utils/apiError";
-
 import {
   createTask,
   getTasks,
@@ -49,14 +46,18 @@ export const getTaskByIdController = asyncHandler(
   async (req: Request, res: Response) => {
     const { id } = req.params;
 
-    if (!mongoose.Types.ObjectId.isValid(id)) {
-      throw new ApiError("Invalid task id", 400);
+    if (!id || Array.isArray(id)) {
+      return res.status(400).json({
+        message: "Invalid task id",
+      });
     }
 
     const task = await getTaskById(id);
 
     if (!task) {
-      throw new ApiError("Task not found", 404);
+      return res.status(404).json({
+        message: "Task not found",
+      });
     }
 
     res.status(200).json({
@@ -74,14 +75,18 @@ export const updateTaskController = asyncHandler(
   async (req: Request, res: Response) => {
     const { id } = req.params;
 
-    if (!mongoose.Types.ObjectId.isValid(id)) {
-      throw new ApiError("Invalid task id", 400);
+    if (!id || Array.isArray(id)) {
+      return res.status(400).json({
+        message: "Invalid task id",
+      });
     }
 
     const task = await updateTask(id, req.body);
 
     if (!task) {
-      throw new ApiError("Task not found", 404);
+      return res.status(404).json({
+        message: "Task not found",
+      });
     }
 
     res.status(200).json({
@@ -99,14 +104,18 @@ export const deleteTaskController = asyncHandler(
   async (req: Request, res: Response) => {
     const { id } = req.params;
 
-    if (!mongoose.Types.ObjectId.isValid(id)) {
-      throw new ApiError("Invalid task id", 400);
+    if (!id || Array.isArray(id)) {
+      return res.status(400).json({
+        message: "Invalid task id",
+      });
     }
 
     const task = await deleteTask(id);
 
     if (!task) {
-      throw new ApiError("Task not found", 404);
+      return res.status(404).json({
+        message: "Task not found",
+      });
     }
 
     res.status(200).json({
