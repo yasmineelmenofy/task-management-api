@@ -2,6 +2,12 @@ import { UserModel } from "../models/user.model";
 import bcrypt from "bcryptjs";
 import { ApiError } from "../utils/apiError";
 
+const sanitizeUser = (user: any) => {
+  const obj = user.toObject();
+  delete obj.password;
+  return obj;
+};
+
 export const registerUser = async (email: string, password: string) => {
   const existingUser = await UserModel.findOne({ email });
 
@@ -16,7 +22,7 @@ export const registerUser = async (email: string, password: string) => {
     password: hashedPassword,
   });
 
-  return user;
+  return sanitizeUser(user);
 };
 
 export const loginUser = async (email: string, password: string) => {
@@ -32,5 +38,5 @@ export const loginUser = async (email: string, password: string) => {
     throw new ApiError(401, "Invalid credentials");
   }
 
-  return user;
+  return sanitizeUser(user);
 };

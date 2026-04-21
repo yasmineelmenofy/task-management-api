@@ -13,23 +13,14 @@ import { protect } from "../middleware/auth.middleware";
 
 const router = Router();
 
-// CREATE
-router.post("/", validate(createTaskSchema), createTaskController);
+router.post("/", protect, validate(createTaskSchema), createTaskController);
 
-// GET ALL
-router.get("/", getAllTasksController);
+router.get("/", protect, getAllTasksController);
 
-// GET ONE
-router.get("/:id", getTaskByIdController);
+router.get("/:id", protect, getTaskByIdController);
 
-// UPDATE
-router.patch("/:id", validate(updateTaskSchema), updateTaskController);
+router.patch("/:id", protect, validate(updateTaskSchema), updateTaskController);
 
-// DELETE
-router.delete("/:id", deleteTaskController);
-
-router.post("/", protect, createTaskController);
-router.patch("/:id", protect, updateTaskController);
 router.delete("/:id", protect, deleteTaskController);
 
 export default router;

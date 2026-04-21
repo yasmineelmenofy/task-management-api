@@ -1,7 +1,7 @@
 import { Request, Response } from "express";
 import { asyncHandler } from "../utils/asyncHandler";
 import { registerUser, loginUser } from "../services/auth.service";
-import { generateToken } from "../utils/generatetoken";
+import { generateToken } from "../utils/generateToken";
 
 export const registerController = asyncHandler(
   async (req: Request, res: Response) => {
@@ -13,7 +13,10 @@ export const registerController = asyncHandler(
 
     res.status(201).json({
       message: "User registered successfully",
-      token,
+      data: {
+        user,
+        token,
+      },
     });
   },
 );
@@ -28,7 +31,10 @@ export const loginController = asyncHandler(
 
     res.status(200).json({
       message: "Login successful",
-      token,
+      data: {
+        user,
+        token,
+      },
     });
   },
 );
