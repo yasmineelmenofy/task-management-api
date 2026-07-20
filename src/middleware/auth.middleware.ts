@@ -11,7 +11,6 @@ export const protect = (req: Request, _res: Response, next: NextFunction) => {
 
   const token = authHeader.split(" ")[1];
 
-  // ✅ FIX: ensure token exists
   if (!token) {
     throw new ApiError(401, "Token missing");
   }

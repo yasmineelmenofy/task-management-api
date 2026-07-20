@@ -57,7 +57,7 @@ The API allows users to:
 
 ## 📂 Project Structure
 
-```id="1k2m9p"
+```
 src
 │
 ├── config
@@ -128,26 +128,65 @@ src
 
 | Method | Endpoint   | Description    |
 | ------ | ---------- | -------------- |
-| GET    | /tasks     | Get all tasks  |
-| GET    | /tasks/:id | Get task by ID |
-| POST   | /tasks     | Create a task  |
-| PATCH  | /tasks/:id | Update a task  |
-| DELETE | /tasks/:id | Delete a task  |
+| GET    | /api/tasks     | Get all tasks  |
+| GET    | /api/tasks/:id | Get task by ID |
+| POST   | /api/tasks     | Create a task  |
+| PATCH  | /api/tasks/:id | Update a task  |
+| DELETE | /api/tasks/:id | Delete a task  |
 
 ---
 
 ## 🔐 Environment Variables
 
-Create a `.env` file:
+1. Copy the example environment file.
 
-```id="q3f8zn"
+```bash
+cp .env.example .env
+```
+
+> On Windows, simply copy `.env.example` and rename the copy to `.env`.
+
+2. Open `.env` and replace the placeholder values with your own.
+
+Example:
+
+```env
 PORT=5000
 MONGO_URI=your_mongodb_connection_string
 JWT_SECRET=your_jwt_secret
 NODE_ENV=development
 ```
+### MongoDB Setup
 
+This project uses **MongoDB Atlas**.
+
+1. Create a free MongoDB Atlas cluster.
+2. Create a database user.
+3. Click **Connect → Drivers**.
+4. Copy the connection string.
+5. Replace `<password>` with your database user's password.
+6. Paste the connection string into `MONGO_URI` inside your `.env` file.
+
+## Prerequisites
+
+- Node.js 20+
+- npm
+- MongoDB Atlas account
 ---
+
+## Quick Start
+
+```bash
+git clone https://github.com/yasmineelmenofy/task-management-api.git
+
+cd task-management-api
+
+npm install
+
+cp .env.example .env
+
+npm run dev
+```
 
 ## ▶️ Getting Started
 
@@ -157,20 +196,17 @@ NODE_ENV=development
 git clone https://github.com/yasmineelmenofy/task-management-api.git
 cd task-management-api
 ```
-
----
-
 ### 2. Install dependencies
 
-```bash id="7s2mva"
+```bash
 npm install
 ```
 
----
+This command installs all dependencies and development dependencies listed in `package.json`.
 
 ### 3. Run development server
 
-```bash id="j4k1zx"
+```bash 
 npm run dev
 ```
 
@@ -178,11 +214,13 @@ npm run dev
 
 ## 🧪 Testing
 
-Use **Postman** to test endpoints.
+After starting the server, the API will be available at
+
+http://localhost:5000
 
 ### Example: Register User
 
-```json id="3v8d1f"
+```json 
 POST /auth/register
 
 {
@@ -195,8 +233,8 @@ POST /auth/register
 
 ### Example: Create Task
 
-```json id="6n2kxp"
-POST /tasks
+```json 
+POST /api/tasks
 
 {
   "title": "Build backend API",
@@ -208,7 +246,7 @@ POST /tasks
 
 ## 🧠 Architecture
 
-```id="l0r5tz"
+```
 Client
  ↓
 Routes
